@@ -23,7 +23,7 @@
 /*********************
  *      DEFINES
  *********************/
-#define SCALING_FREQEST (unsigned long)((RF_XTAL_FREQ)/16.384)
+#define SCALING_FREQEST (unsigned long)((RF_XTAL_FREQ) / 16.384)
 
 /**********************
  *  STATIC PROTOTYPES
@@ -56,7 +56,7 @@ void cc1101_init_config(void)
 void cc1101_read_config(void)
 {
 	ESP_LOGD(TAG, "%s", __FUNCTION__);
-	cc1101_read_burst_registers(0, (uint8_t*) &cc1101, sizeof(cc1101));
+	cc1101_read_burst_registers(0, (uint8_t *)&cc1101, sizeof(cc1101));
 }
 
 void cc1101_print_config()
@@ -741,7 +741,8 @@ void cc1101_set_agc_freeze(uint8_t freeze)
 {
 	ESP_LOGD(TAG, "%s", __FUNCTION__);
 
-	if( freeze > 3) freeze = 3;
+	if (freeze > 3)
+		freeze = 3;
 	agcctrl0_t agcctrl0;
 	cc1101_read_register(CC1101_AGCCTRL0, &agcctrl0.reg);
 	agcctrl0.agc_freeze = freeze;
@@ -752,7 +753,8 @@ void cc1101_set_max_lna_gain(uint8_t lna_gain)
 {
 	ESP_LOGD(TAG, "%s", __FUNCTION__);
 
-	if (lna_gain > 7) lna_gain = 7;
+	if (lna_gain > 7)
+		lna_gain = 7;
 	agcctrl2_t agcctrl2;
 	cc1101_read_register(CC1101_AGCCTRL2, &agcctrl2.reg);
 	agcctrl2.max_lna_gain = lna_gain;
@@ -763,7 +765,8 @@ void cc1101_set_max_dvga_gain(uint8_t dvga_gain)
 {
 	ESP_LOGD(TAG, "%s", __FUNCTION__);
 
-	if (dvga_gain > 3) dvga_gain = 3;
+	if (dvga_gain > 3)
+		dvga_gain = 3;
 	agcctrl2_t agcctrl2;
 	cc1101_read_register(CC1101_AGCCTRL2, &agcctrl2.reg);
 	agcctrl2.max_dvga_gain = dvga_gain;
@@ -819,19 +822,24 @@ magn_target_t cc1101_get_magn_target(void)
 	return agcctrl2.magn_target;
 }
 
-int8_t cc1101_get_rssi(void)
+static uint8_t cc1101_get_rssi(void)
 {
 	uint8_t rssi;
 	cc1101_read_status_register(CC1101_RSSI, &rssi);
-	return (int8_t)rssi;
+	return rssi;
 }
 
-int8_t cc1101_get_rssi_dbm(void)
+int16_t cc1101_get_rssi_dbm(void)
 {
 	ESP_LOGD(TAG, "%s", __FUNCTION__);
+	int16_t rssi_dBm;
+	uint8_t rssi_dec = cc1101_get_rssi();
+	if (rssi_dec > INT8_MAX)
+		rssi_dBm = (int16_t)((int16_t)(rssi_dec - UINT8_MAX) / 2) + RF_RSSI_OFFSET_DEFAULT;
+	else
+		rssi_dBm = (rssi_dec / 2) + RF_RSSI_OFFSET_DEFAULT;
 
-	int8_t rssi = cc1101_get_rssi();
-	return (rssi / 2) + RF_RSSI_OFFSET_DEFAULT;
+	return rssi_dBm;
 }
 
 uint8_t cc1101_get_tx_fifo_info(void)
@@ -942,7 +950,6 @@ uint8_t cc1101_get_pkt_status(void)
 	cc1101_read_status_register(CC1101_PKTSTATUS, &pktstatus_t.reg);
 	return pktstatus_t.reg;
 }
-
 
 void send_data(void)
 {

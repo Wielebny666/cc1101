@@ -120,8 +120,7 @@ carrier_sense_rel_thr_t cc1101_get_cs_rel_threshold(void);
 void cc1101_set_magn_target(magn_target_t magn_target);
 magn_target_t cc1101_get_magn_target(void);
 
-int8_t cc1101_get_rssi(void);
-int8_t cc1101_get_rssi_dbm(void);
+int16_t cc1101_get_rssi_dbm(void);
 
 uint8_t cc1101_get_tx_fifo_info(void);
 
