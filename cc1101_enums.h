@@ -23,6 +23,13 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
+typedef enum cc1101_radio_cfg_t
+{
+    CFG_OOK_ASYNC_RX,
+    CFG_OOK_ASYNC_TX,
+    CFG_OOK_ASYNC_RX1,
+} cc1101_radio_cfg_t;
+
 typedef enum cc1101_marc_state_e
 {
     CC1101_STATE_SLEEP = 0,

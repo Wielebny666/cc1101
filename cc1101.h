@@ -23,6 +23,7 @@ extern "C"
  *   GLOBAL FUNCTIONS
  **********************/
 void cc1101_init_config(void);
+void cc1101_choice_config(cc1101_radio_cfg_t choice);
 void cc1101_read_config(void);
 void cc1101_print_config(void);
 

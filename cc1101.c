@@ -46,11 +46,38 @@ void cc1101_init_config(void)
 {
 	ESP_LOGD(TAG, "%s", __FUNCTION__);
 
-	foreach (cc1101_reg_setting_t *cfg, preferredSettings)
+	foreach (cc1101_reg_setting_t *cfg, config_register_ask_async_rx)
 	{
 		cc1101_write_register(cfg->addr, cfg->data);
 	}
 	ESP_LOGD(TAG, "Set init settings.");
+}
+
+void cc1101_choice_config(cc1101_radio_cfg_t choice)
+{
+	ESP_LOGD(TAG, "%s", __FUNCTION__);
+
+	switch (choice)
+	{
+	case CFG_OOK_ASYNC_RX:
+	{
+		foreach (cc1101_reg_setting_t *cfg, config_register_ask_async_rx)
+		{
+			cc1101_write_register(cfg->addr, cfg->data);
+		}
+		break;
+	}
+	case CFG_OOK_ASYNC_TX:
+	{
+		foreach (cc1101_reg_setting_t *cfg, config_register_ask_async_tx)
+		{
+			cc1101_write_register(cfg->addr, cfg->data);
+		}
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void cc1101_read_config(void)
@@ -95,20 +122,20 @@ void cc1101_print_config()
 	ESP_LOGI(TAG, "%s %#04x", "agcctrl0", cc1101.agcctrl0.reg);
 }
 
-void cc1101_set_carrier_frequency(double frequency_in_mHz)
+void cc1101_set_carrier_frequency(double_t frequency_in_MHz)
 {
 	ESP_LOGD(TAG, "%s", __FUNCTION__);
 
 	// bounds checking for cc1101 hardware limitations
-	if (!(((frequency_in_mHz >= 300) && (frequency_in_mHz <= 348)) || ((frequency_in_mHz >= 387) && (frequency_in_mHz <= 464)) || ((frequency_in_mHz >= 779) && (frequency_in_mHz <= 928))))
+	if (!(((frequency_in_MHz >= 300.0) && (frequency_in_MHz <= 348.0)) || ((frequency_in_MHz >= 387.0) && (frequency_in_MHz <= 464.0)) || ((frequency_in_MHz >= 779.0) && (frequency_in_MHz <= 928.0))))
 	{
 		ESP_LOGW(TAG, "Frequency out of bounds! Use 300-348, 387-464, 779-928MHz only!");
 		return;
 	}
 
 	// trying to avoid any floating point issues
-	double_t secondByteOverflow = fmod(frequency_in_mHz, 26);
-	uint8_t firstByteValue = (frequency_in_mHz - secondByteOverflow) / 26;
+	double_t secondByteOverflow = fmod(frequency_in_MHz, 26);
+	uint8_t firstByteValue = (frequency_in_MHz - secondByteOverflow) / 26;
 
 	double_t thirdByteOverflow = fmod((secondByteOverflow * 255), 26);
 	uint8_t secondByteValue = ((secondByteOverflow * 255) - thirdByteOverflow) / 26;
@@ -120,7 +147,7 @@ void cc1101_set_carrier_frequency(double frequency_in_mHz)
 	cc1101_write_register(CC1101_FREQ1, secondByteValue);
 	cc1101_write_register(CC1101_FREQ0, thirdByteValue);
 
-	ESP_LOGI(TAG, "Set Carrier Frequency: %f. FREQ2: %02X, FREQ1: %02X, FREQ0: %02X", frequency_in_mHz, firstByteValue, secondByteValue, thirdByteValue);
+	ESP_LOGI(TAG, "Set Carrier Frequency: %f. FREQ2: %02X, FREQ1: %02X, FREQ0: %02X", frequency_in_MHz, firstByteValue, secondByteValue, thirdByteValue);
 }
 
 double cc1101_get_carrier_frequency(void)
