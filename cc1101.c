@@ -880,7 +880,7 @@ uint8_t cc1101_get_tx_fifo_info(void)
 void cc1101_set_pa_table(void)
 {
 	ESP_LOGD(TAG, "%s", __FUNCTION__);
-	cc1101_write_burst_registers(CC1101_PATABLE, pa_table_power, sizeof(pa_table_power));
+	cc1101_write_burst_registers(CC1101_PATABLE, pa_table_power_12dB, sizeof(pa_table_power_12dB));
 	ESP_LOGD(TAG, "Set PA power table.");
 }
 
@@ -889,9 +889,9 @@ void cc1101_get_pa_table(void)
 	ESP_LOGD(TAG, "%s", __FUNCTION__);
 
 	uint8_t pa_table[8];
-	cc1101_read_burst_registers(CC1101_PATABLE, pa_table, sizeof(pa_table_power));
+	cc1101_read_burst_registers(CC1101_PATABLE, pa_table, sizeof(pa_table_power_12dB));
 
-	for (uint8_t i = 0; i < sizeof(pa_table_power); i++)
+	for (uint8_t i = 0; i < sizeof(pa_table_power_12dB); i++)
 	{
 		ESP_LOGD(TAG, "%x - %x", i, pa_table[i]);
 	}
