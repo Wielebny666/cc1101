@@ -108,8 +108,8 @@ uint8_t cc1101_get_pa_power_setting(void);
 void cc1101_set_filter_length(filter_length_t filter_length);
 uint8_t cc1101_get_filter_length(void);
 
-void cc1101_set_hysteresis_level(hyst_level_t hyst_level);
-hyst_level_t cc1101_get_hysteresis_level(void);
+void cc1101_set_hysteresis_level(hysteresis_level_t hyst_level);
+hysteresis_level_t cc1101_get_hysteresis_level(void);
 
 void cc1101_set_agc_freeze(uint8_t freeze);
 void cc1101_set_max_lna_gain(uint8_t lna_gain);

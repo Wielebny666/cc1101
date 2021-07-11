@@ -271,7 +271,7 @@ typedef union __attribute__((__packed__, aligned(1))) {
         filter_length_t filter_length : 2;
         uint8_t agc_freeze : 2;
         uint8_t wait_time : 2;
-        hyst_level_t hyst_level : 2;
+        hysteresis_level_t hyst_level : 2;
     };
 } agcctrl0_t;
 

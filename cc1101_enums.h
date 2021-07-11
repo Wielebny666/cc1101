@@ -156,7 +156,7 @@ typedef enum
     HYSTERESIS_LOW,
     HYSTERESIS_MEDIUM,
     HYSTERESIS_LARGE,
-} hyst_level_t;
+} hysteresis_level_t;
 
 typedef enum
 {

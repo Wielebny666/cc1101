@@ -744,7 +744,7 @@ uint8_t cc1101_get_filter_length(void)
 	return agcctrl0.filter_length;
 }
 
-void cc1101_set_hysteresis_level(hyst_level_t hyst_level)
+void cc1101_set_hysteresis_level(hysteresis_level_t hyst_level)
 {
 	ESP_LOGD(TAG, "%s", __FUNCTION__);
 
@@ -755,7 +755,7 @@ void cc1101_set_hysteresis_level(hyst_level_t hyst_level)
 	ESP_LOGD(TAG, "Set Filter Length: %d.", agcctrl0.hyst_level);
 }
 
-hyst_level_t cc1101_get_hysteresis_level(void)
+hysteresis_level_t cc1101_get_hysteresis_level(void)
 {
 	ESP_LOGD(TAG, "%s", __FUNCTION__);
 
